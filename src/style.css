@@ -1,0 +1,460 @@
+:root {
+    --primary: #004C42;
+    --secondary: #D9F47B;
+    --beige: #F2EDD3;
+    --white: #FFFFFF;
+    --orange: #f25003;
+    --teal: #319795;
+    --hover: #003A33
+}
+
+*, html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.root {
+    width: 100%;
+    display: flex;
+    background-color: var(--beige);
+}
+
+#sidebar {
+    height: 100svh;
+    width: 20%;
+    position: fixed;
+    left: 0;
+    z-index: 10;
+    padding: 0 20px;
+    background-color: var(--primary);
+}
+
+#sidebarCloseButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.4em;
+    color: var(--beige);
+    display: none;
+    cursor: pointer;
+}
+
+.logo {
+    height: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 1.6em;
+}
+
+.logo>h1 {
+    color: var(--beige)
+}
+
+.logo>h1>span {
+    color: var(--secondary);
+}
+
+.search-bar-container {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#searchBar {
+    height: 40px;
+    width: 90%;
+    padding-right: 30px;
+    background-color: transparent;
+    border: transparent;
+    border-bottom: 2px solid var(--beige);
+    font-size: 1em;
+    color: var(--beige);
+}
+
+#searchBar:focus {
+    border-bottom: 2px solid var(--secondary);
+    outline: none;
+}
+
+.search-bar-container>label {
+    height: 10px;
+    width: 10px;
+    position: absolute;
+    right: 40px;
+    bottom: 30px;
+    color: var(--beige);
+    background-color: var(--primary);
+    cursor: pointer;
+}
+
+.navigation {
+    height: max-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--beige)
+}
+
+.navigation>li {
+    height: 60px;
+    padding: 0 16px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+    transition-duration: 500ms;
+    font-size: .8em;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    -ms-border-radius: 12px;
+    -o-border-radius: 12px;
+}
+
+.navigation>li:hover {
+    background-color: var(--hover);
+}
+
+#addBookForm {
+    height: 100svh;
+    width: 30%;
+    position: fixed;
+    z-index: 20;
+    left: -100%;
+    background: var(--white);
+    color: var(--primary);
+    transition-duration: 500ms;
+}
+
+#addBookForm>header {
+    height: 100px;
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#addBookForm>header>section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#addBookForm>header>#closeFormBtn {
+    height: 35px;
+    width: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    margin-top: 5px;
+    color: #000;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+.content {
+    height: 100svh;
+    width: 80%;
+    position: fixed;
+    right: 0;
+    overflow-x: hidden;
+}
+
+.banner {
+    height: 200px;
+    width: 100%;
+    position: relative;
+}
+
+.banner>i {
+    padding: 7px;
+    border-radius: 8px;
+    font-size: 1.4em;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: var(--primary);
+    background-color: var(--beige);
+    cursor: pointer;
+    display: none;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+}
+
+.banner>img {
+    height: 200px;
+    width: 100%;
+    background-size: auto 200px;
+    background-position: bottom center;
+}
+
+.banner h1, .banner h3 {
+    position: absolute;
+    left: 5%;
+    color: var(--beige);
+}
+
+.banner h1 {
+    top: 30%;
+    font-size: 2.3em;
+}
+
+.banner h3 {
+    top: 50%;
+    font-size: 1.2em;
+}
+
+.bookshelf-container {
+    min-height: calc(100svh - 200px);
+    width: 100%;
+}
+
+#listContainer, #completedContainer {
+    min-height: calc(100svh - 200px);
+    width: 100%;
+    padding: 0 15px;
+    position: absolute;
+    transition-duration: 500ms;
+    background: var(--beige);
+}
+
+#listContainer>.heading, #completedContainer>.heading {
+    font-size: 1.7em;
+    margin: 15px 0;
+}
+
+#listContainer {
+    left: 0%;
+}
+
+#completedContainer {
+    right: -100%;
+}
+
+#addBookForm>section {
+    padding: 0 32px;
+}
+
+#addBookForm>.form-input-container {
+    height: 70%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#addBookForm>.form-input-container>.text-input-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+#addBookForm>.form-input-container>.checkbox-input-label {
+    display: flex;
+    gap: 8px;
+}
+
+.form-input-text {
+    height: 40px;
+    width: 80%;
+    font-size: 1.1em;
+    padding-left: 8px;
+    border: 2px solid;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+#addBookForm>.form-button-container {
+    height: 20%;
+    width: 100%;
+}
+
+.form-button-container>button {
+    width: 100%;
+    height: 48px;
+    background-color: var(--orange);
+    color: var(--beige);
+    border: transparent;
+    border-radius: 12px;
+    font-size: 1.2em;
+    cursor: pointer;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    -ms-border-radius: 12px;
+    -o-border-radius: 12px;
+}
+
+#listRoot, #completedRoot {
+    display: flex;
+    gap: 1%;
+    flex-wrap: wrap;
+}
+
+.card-container {
+    width: 32%;
+    height: 230px;
+    margin-bottom: 5%;
+    color: var(--primary);
+    background-color: var(--secondary);
+    font-size: 1.2em;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    justify-content: space-around;
+    position: relative;
+}
+
+.card-container>.book-data-section {
+    padding-left: 10px;
+}
+
+.card-container>.button-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.card-container>.button-section>button {
+    height: 40px;
+    width: 40%;
+    cursor: pointer;
+}
+
+.remove-card-button, .handle-complete-button {
+    border: transparent;
+    border-radius: 8px;
+    color: var(--beige);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+}
+
+.remove-card-button {
+    background-color: var(--orange);
+}
+
+.handle-complete-button {
+    background-color: var(--teal);
+}
+
+#alertBox {
+    position: fixed;
+    right: -100%;
+    top: 0;
+    height: 100px;
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 0;
+    background-color: var(--beige);
+    border-radius: 8px;
+    color: var(--primary);
+    font-size: 1.2em;
+    transition-duration: 500ms;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+}
+
+@media only screen and (max-width: 1200px) {
+    #sidebar {
+        width: 300px;
+        position: fixed;
+        left: -100%;
+        top: 0;
+        transition-duration: 500ms;
+        z-index: 10;
+    }
+
+    #sidebarCloseButton {
+        display: block;
+        top: 17px;
+        right: 17px;
+    }
+
+    .logo {
+        font-size: 1.3em;
+    }
+
+    .banner>i {
+        display: block;
+    }
+
+    .content {
+        width: 100%;
+    }
+
+    .card-container {
+        font-size: .9em;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    #sidebar {
+        width: 200px;
+    }
+
+    #sidebarCloseButton {
+        font-size: 1.3em;
+    }
+
+    .logo {
+        font-size: 1em;
+    }
+
+    #searchBar {
+        font-size: .8em;
+    }
+
+    .search-bar-container>label {
+        right: 20px;
+    }
+
+    .navigation>li {
+        height: 45px;
+        font-size: 0.6em;
+    }
+
+    .banner {
+        height: 150px;
+    }
+
+    .banner>h1 {
+        font-size: 2em;
+    }
+
+    .banner>h3 {
+        top: 55%;
+        font-size: .8em;
+    }
+
+    #addBookForm {
+        width: 100%;
+    }
+
+    .card-container {
+        width: 100%;
+    }
+}
