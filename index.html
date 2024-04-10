@@ -3,91 +3,126 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BOOKSHELF WEB APP</title>
+    <title>SELFSAGE</title>
     <link rel="stylesheet" href="./src/style.css" />
-    <link rel="shortcut icon" href="./public/favicon.svg" type="image/x-icon" />
+    <link rel="shortcut icon" href="./public/favicon.ico" type="image/x-icon" />
     <script
       src="https://kit.fontawesome.com/e515c07cdd.js"
       crossorigin="anonymous"
     ></script>
   </head>
   <body>
-    <main class="root">
-      <aside id="sidebar">
-        <i id="sidebarCloseButton" class="fa-close fa-solid"></i>
-        <section class="logo">
-          <h1>
-            <span>My</span>
-            Bookshelf
-          </h1>
-        </section>
-        <section class="search-bar-container">
-          <input type="text" name="searchBar" id="searchBar" placeholder="Search Book Title" />
-          <label for="searchBar" class="fa-search fa-solid"></label>
-        </section>
-        <ul class="navigation">
+    <header>
+      <img src="/public/header-logo.webp" class="header-logo" />
+      <section>
+        <ul class="navigation-container">
           <li class="navigate">
-            <i class="fa-list fa-solid"></i>
-            <h2>List</h2>
+            <i class="fa-solid fa-book"></i>
+            <h2>Book List</h2>
           </li>
           <li class="navigate">
-            <i class="fa-bookmark fa-solid"></i>
-            <h2>Completed</h2>
+            <i class="fa-solid fa-bookmark"></i>
+            <h2>Bookmark List</h2>
           </li>
-          <li id="addBookBtn">
-            <i class="fa-pen-to-square fa-solid"></i>
-            <h2>Add New</h2>
+          <li id="addBook">
+            <i class="fa-solid fa-book-medical"></i>
+            <h2>Add Book</h2>
           </li>
         </ul>
-      </aside>
+        <div class="search-book-container">
+          <input
+            class="search-book-input"
+            type="text"
+            name="Search Book"
+            id="searchBook"
+            placeholder="Search Book Title"
+          />
+          <label
+            for="searchBook"
+            class="search-book-icon fa-solid fa-search"
+          ></label>
+        </div>
+      </section>
+    </header>
+    <main>
       <form id="addBookForm">
-        <header>
-          <section>
-            <i class="fa-pen-to-square fa-solid"></i>
-            <h1>Add New Book</h1>
-          </section>
-          <i id="closeFormBtn" class="fa-close fa-solid"></i>
-        </header>
-        <section class="form-input-container">
-          <label class="text-input-label" for="titleInput">Title
-            <input class="form-input-text" type="text" name="title" id="titleInput" required />
+        <i id="closeAddBookForm" class="fa-solid fa-close"></i>
+        <section class="add-book-input-container">
+          <label for="bookTitle"
+            >Title
+            <input
+              type="text"
+              name="Book Title"
+              id="bookTitle"
+              aria-required="true"
+              required
+            />
           </label>
-          <label class="text-input-label" for="authorInput">Author
-            <input class="form-input-text" type="text" name="author" id="authorInput" required />
+          <label for="bookImage"
+            >Image
+            <input type="text" name="Book Image" id="bookImage" />
           </label>
-          <label class="text-input-label" for="yearInput">Year
-            <input class="form-input-text" type="number" name="year" id="yearInput" required />
+          <label for="bookAuthor"
+            >Author
+            <input type="text" name="Book Author" id="bookAuthor" required />
           </label>
-          <label class="checkbox-input-label" for="completedInput">Set is Completed
-            <input type="checkbox" name="isCompleted" id="completedInput">
+          <label for="bookYear"
+            >Year
+            <input type="number" name="Book Year" id="bookYear" required />
+          </label>
+          <label for="isBookmark"
+            >Set as Bookmark
+            <input type="checkbox" name="Is Bookmark" id="isBookmark" required />
           </label>
         </section>
-        <section class="form-button-container">
-          <button id="formSubmitButton" type="submit">Submit</button>
-        </section>
+        <button class="add-book-submit-btn" type="submit">Submit</button>
       </form>
-      <section class="content">
-        <div class="banner">
-          <i class="fa-bars fa-solid" id="barsMenu"></i>
-          <img src="./public/banner.webp" alt="Banner Image" />
-          <h1>Good <span id="greetingText"></span></h1>
-          <h3 id="bannerDate"></h3>
-        </div>
-        <div class="bookshelf-container">
-          <section id="listContainer">
-            <h1 class="heading">Book List</h1>
-            <div id="listRoot"></div>
-          </section>
-          <section id="completedContainer">
-            <h1 class="heading">Completed Book List</h1>
-            <div id="completedRoot"></div>
-          </section>
-        </div>
+      <section class="bookList-container">
+        <h3>Book List</h3>
+        <div id="bookListRoot"></div>
       </section>
-      <section id="alertBox">
-        <p id="alertText"></p>
+      <section class="bookmark-container">
+        <h3>Bookmark List</h3>
+        <div id="bookmarkRoot"></div>
       </section>
+      <form id="editBookForm">
+        <i id="closeEditBookForm" class="fa-solid fa-close"></i>
+        <h3>
+          Book Id: 
+          <span id="currentBookId"></span>
+        </h3>
+        <section class="add-book-input-container">
+          <label for="currentBookTitle"
+            >Title
+            <input type="text" id="currentBookTitle" required>
+          </label>
+          <label for="currentBookImage"
+            >Image
+            <input type="text" id="currentBookImage">
+          </label>
+          <label for="currentBookAuthor"
+            >Author
+            <input type="text" id="currentBookAuthor" required>
+          </label>
+          <label for="currentBookYear"
+            >Year
+            <input type="number" id="currentBookYear" required>
+          </label>
+          <label for="currentIsBookmark"
+            >Set as Bookmark
+            <input type="checkbox" id="currentIsBookmark" required>
+          </label>
+        </section>
+        <button type="submit" id="submitEditBookForm">Submit</button>
+      </form>
     </main>
-    <script src="./src/script.js"></script>
+    <div id="alertBox" class="alert">
+      <div class="icon-wrapper">
+        <i class="fa-solid fa-thumbs-up"></i>
+      </div>
+      <p id="alertText"></p>
+      <i id="closeAlert" class="fa-solid fa-close"></i>
+    </div>
   </body>
+  <script src="./src/script.js"></script>
 </html>

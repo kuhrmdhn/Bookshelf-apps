@@ -1,277 +1,310 @@
 const navigate = document.querySelectorAll(".navigate");
-const sidebar = document.getElementById("sidebar");
-const barsMenu = document.getElementById("barsMenu");
-const sidebarCloseButton = document.getElementById("sidebarCloseButton");
-const searchBar = document.getElementById("searchBar");
-const addBookBtn = document.getElementById("addBookBtn");
+const addBook = document.getElementById("addBook");
+const closeAddBookForm = document.getElementById("closeAddBookForm");
+const bookListContainer = document.querySelector(".bookList-container");
+const bookmarkContainer = document.querySelector(".bookmark-container");
 const addBookForm = document.getElementById("addBookForm");
-const closeFormBtn = document.getElementById("closeFormBtn");
-const listContainer = document.getElementById("listContainer");
-const completedContainer = document.getElementById("completedContainer");
-const greetingText = document.getElementById("greetingText");
-const bannerDate = document.getElementById("bannerDate");
-const titleInput = document.getElementById("titleInput");
-const authorInput = document.getElementById("authorInput");
-const yearInput = document.getElementById("yearInput");
-const completedInput = document.getElementById("completedInput");
-const formSubmitButton = document.getElementById("formSubmitButton");
-const listRoot = document.getElementById("listRoot");
-const completedRoot = document.getElementById("completedRoot");
-const removeCardButton = document.querySelectorAll(".remove-card-button");
-const allBookData = JSON.parse(localStorage.getItem("book-list")) || [];
+
+function showAddBookForm() {
+  addBookForm.style.right = "0";
+}
+function hideAddBookForm() {
+  addBookForm.style.right = "-100%";
+}
+function showBookListPage() {
+  bookListContainer.style.left = "0%";
+  bookmarkContainer.style.right = "-100%";
+}
+function showBookmarkPage() {
+  bookmarkContainer.style.right = "0";
+  bookListContainer.style.left = "-100%";
+}
+addBook.addEventListener("click", showAddBookForm);
+closeAddBookForm.addEventListener("click", hideAddBookForm);
+navigate.forEach((e) => {
+  e.addEventListener("click", () => {
+    e.innerText === "Book List" ? showBookListPage() : showBookmarkPage();
+  });
+});
+
+const bookTitle = document.getElementById("bookTitle");
+const bookImage = document.getElementById("bookImage");
+const bookAuthor = document.getElementById("bookAuthor");
+const bookYear = document.getElementById("bookYear");
+const isBookmark = document.getElementById("isBookmark");
+const addBookSubmitBtn = document.querySelector(".add-book-submit-btn");
+const bookListRoot = document.getElementById("bookListRoot");
+const bookmarkRoot = document.getElementById("bookmarkRoot");
+
+function resetInputValue() {
+  bookTitle.value = "";
+  bookImage.value = "";
+  bookAuthor.value = "";
+  bookYear.value = "";
+  isBookmark.checked = false;
+}
+function hideAllRootChild() {
+  bookListRoot.innerHTML = "";
+  bookmarkRoot.innerHTML = "";
+}
+function handleAddBook(e) {
+  if (
+    bookTitle.value === "" ||
+    bookAuthor.value === "" ||
+    bookYear.value == 0
+  ) {
+    showAlertBox("Input Can't Empty!");
+    return;
+  }
+  e.preventDefault();
+  const bookData = {
+    id: Date.now(),
+    title: bookTitle.value,
+    image: bookImage.value,
+    author: bookAuthor.value,
+    year: Number(bookYear.value),
+    isBookmark: isBookmark.checked,
+  };
+  createCardElement(
+    bookData.id,
+    bookData.title,
+    bookData.image,
+    bookData.author,
+    bookData.year,
+    bookData.isBookmark
+  );
+  hideAddBookForm();
+  resetInputValue();
+  addLocalStorage(bookData);
+  showAlertBox("Success to Add New Book!");
+}
+function createCardElement(id, title, image, author, year, isBookmark) {
+  const divContainer = document.createElement("div");
+  const bookDataList = document.createElement("ul");
+  const buttonContainer = document.createElement("section");
+  const bookImageList = document.createElement("img");
+  const bookTitleList = document.createElement("li");
+  const bookAuthorList = document.createElement("li");
+  const bookYearList = document.createElement("li");
+  const handleBookmarkBtn = document.createElement("button");
+  const handleDeleteBtn = document.createElement("button");
+  const handleEditBtn = document.createElement("button");
+
+  divContainer.setAttribute("card-id", id);
+  bookTitleList.setAttribute("title", title);
+  bookImageList.setAttribute("alt", title);
+  image !== ""
+    ? bookImageList.setAttribute("src", image)
+    : bookImageList.setAttribute("src", "/public/unknown_book.webp");
+
+  divContainer.classList.add("book-card-container");
+  handleEditBtn.classList.add("fa-solid", "fa-pen", "edit-card-btn");
+  handleDeleteBtn.classList.add("fa-solid", "fa-trash", "remove-card-btn");
+  isBookmark
+    ? handleBookmarkBtn.classList.add(
+        "fa-solid",
+        "fa-bookmark",
+        "bookmark-card-btn"
+      )
+    : handleBookmarkBtn.classList.add(
+        "fa-solid",
+        "fa-book-bookmark",
+        "bookmark-card-btn"
+      );
+
+  bookTitleList.innerText = title;
+  bookAuthorList.innerText = `Author:  ${author}`;
+  bookYearList.innerText = `Year: ${year}`;
+
+  buttonContainer.appendChild(handleEditBtn);
+  buttonContainer.appendChild(handleBookmarkBtn);
+  buttonContainer.appendChild(handleDeleteBtn);
+  bookDataList.appendChild(bookTitleList);
+  bookDataList.appendChild(bookAuthorList);
+  bookDataList.appendChild(bookYearList);
+  bookDataList.appendChild(buttonContainer);
+  divContainer.appendChild(bookImageList);
+  divContainer.appendChild(bookDataList);
+
+  isBookmark
+    ? bookmarkRoot.appendChild(divContainer)
+    : bookListRoot.appendChild(divContainer);
+}
+
+addBookSubmitBtn.addEventListener("click", (e) => handleAddBook(e));
+
+const bookStorage = JSON.parse(localStorage.getItem("bookStorage")) || [];
+function loadBookData() {
+  bookStorage.forEach((book) =>
+    createCardElement(
+      book.id,
+      book.title,
+      book.image,
+      book.author,
+      book.year,
+      book.isBookmark
+    )
+  );
+}
+
+function addLocalStorage(data) {
+  bookStorage.push(data);
+  localStorage.setItem("bookStorage", JSON.stringify(bookStorage));
+}
+
+function setLocalStorage(data) {
+  localStorage.setItem("bookStorage", JSON.stringify(data));
+}
+
+const editBookForm = document.getElementById("editBookForm");
+const closeEditBookForm = document.getElementById("closeEditBookForm");
+const currentBookId = document.getElementById("currentBookId");
+const currentBookTitle = document.getElementById("currentBookTitle");
+const currentBookImage = document.getElementById("currentBookImage");
+const currentBookAuthor = document.getElementById("currentBookAuthor");
+const currentBookYear = document.getElementById("currentBookYear");
+const currentIsBookmark = document.getElementById("currentIsBookmark");
+const submitEditBookForm = document.getElementById("submitEditBookForm");
+
+function handleBookmark(bookCard) {
+  const cardId = Number(bookCard.getAttribute("card-id"));
+  const bookIndex = bookStorage.findIndex((book) => book.id === cardId);
+  const currentBookCard = bookStorage[bookIndex];
+  const updatedBookData = bookStorage[bookIndex];
+  const newBookmarkStatus = !currentBookCard.isBookmark;
+  currentBookCard.isBookmark = newBookmarkStatus;
+  createCardElement(
+    currentBookCard.id,
+    currentBookCard.title,
+    currentBookCard.image,
+    currentBookCard.author,
+    currentBookCard.year,
+    currentBookCard.isBookmark
+  );
+  addLocalStorage(updatedBookData);
+  handleDeleteCard(bookCard);
+  newBookmarkStatus
+    ? showAlertBox("Added to Bookmark!")
+    : showAlertBox("Added to Book List");
+}
+function handleDeleteCard(bookCard) {
+  bookCard.remove();
+  const cardId = Number(bookCard.getAttribute("card-id"));
+  const bookIndex = bookStorage.findIndex((book) => book.id === cardId);
+  bookStorage.splice(bookIndex, 1);
+  setLocalStorage(bookStorage);
+  showAlertBox("Success to Remove Book!");
+}
+function showEditBookForm(bookCard) {
+  editBookForm.style.right = "0";
+  const currentCardId = Number(bookCard.getAttribute("card-id"));
+  const currentBookData = bookStorage.find((book) => book.id === currentCardId);
+  currentBookId.innerText = currentBookData.id;
+  currentBookTitle.value = currentBookData.title;
+  currentBookImage.value = currentBookData.image;
+  currentBookAuthor.value = currentBookData.author;
+  currentBookYear.value = currentBookData.year;
+  currentIsBookmark.checked = currentBookData.isBookmark;
+}
+function hideEditBookForm() {
+  editBookForm.style.right = "-100%";
+  currentBookId.innerText = "";
+  currentBookTitle.value = "";
+  currentBookImage.value = "";
+  currentBookAuthor.value = "";
+  currentBookYear.value = "";
+  currentIsBookmark.checked = false;
+}
+function submitEditedBookData(e) {
+  if (
+    currentBookTitle.value === "" ||
+    currentBookAuthor.value === "" ||
+    currentBookYear.value == 0
+  ) {
+    showAlertBox("Input Can't Empty!");
+    return;
+  }
+  e.preventDefault();
+  const bookIndex = bookStorage.findIndex(
+    (book) => book.id === currentBookId.innerText
+  );
+  const newData = {
+    id: Number(currentBookId.innerText),
+    title: currentBookTitle.value,
+    image: currentBookImage.value,
+    author: currentBookAuthor.value,
+    year: Number(currentBookYear.value),
+    isBookmark: currentIsBookmark.checked,
+  };
+  bookStorage.splice(bookIndex, 1, newData);
+  setLocalStorage(bookStorage);
+  hideAllRootChild();
+  loadBookData();
+  hideEditBookForm();
+  showAlertBox("Success to Edit Book Data, Data Will be Saved!");
+}
+
+closeEditBookForm.addEventListener("click", hideEditBookForm);
+submitEditBookForm.addEventListener("click", submitEditedBookData);
+document.body.addEventListener("click", (element) => {
+  if (element.target.classList.contains("bookmark-card-btn")) {
+    const cardElement = element.target.closest("div");
+    handleBookmark(cardElement);
+  }
+});
+
+document.body.addEventListener("click", (element) => {
+  if (element.target.classList.contains("remove-card-btn")) {
+    const cardElement = element.target.closest("div");
+    handleDeleteCard(cardElement);
+  }
+});
+document.body.addEventListener("click", (element) => {
+  if (element.target.classList.contains("edit-card-btn")) {
+    const cardElement = element.target.closest("div");
+    showEditBookForm(cardElement);
+  }
+});
+
 const alertBox = document.getElementById("alertBox");
 const alertText = document.getElementById("alertText");
+const closeAlert = document.getElementById("closeAlert");
 
-// Set greetingText in Banner
-const date = new Date();
-const hour = date.getHours();
-switch (true) {
-  case hour < 12:
-    greetingText.innerText = "Morning";
-    break;
-  case hour < 18:
-    greetingText.innerText = "Afternoon";
-    break;
-  default:
-    greetingText.innerText = "Night";
-    break;
-}
-
-// Set Date in Banner
-const day = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
-const month = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-const isDate = `${day[date.getDay()]}, ${
-  month[date.getMonth()]
-} ${date.getDate()} ${date.getFullYear()}`;
-bannerDate.innerText = isDate;
-
-// Handle Sidebar Show
-function showSidebar() {
-  sidebar.style.left = "0";
-}
-function hideSidebar() {
-  sidebar.style.left = "-100%";
-}
-barsMenu.addEventListener("click", showSidebar);
-sidebarCloseButton.addEventListener("click", hideSidebar);
-
-// Set Alert show and Alert Text
-function setAlert(text) {
+function showAlertBox(text) {
   alertText.innerText = text;
   alertBox.style.right = "0";
   setTimeout(() => {
-    alertText.innerText = "";
-    alertBox.style.right = "-100%";
+    hideAlertBox();
   }, 3000);
 }
 
-// Set Show Page
-function showListPage() {
-  listContainer.style.left = "0%";
-  completedContainer.style.right = "-100%";
+function hideAlertBox() {
+  alertBox.style.right = "-100%";
 }
-function showCompletedPage() {
-  listContainer.style.left = "-100%";
-  completedContainer.style.right = "0%";
-}
-navigate.forEach((e) =>
-  e.addEventListener("click", () =>
-    e.innerText === "List" ? showListPage() : showCompletedPage()
-  )
-);
+closeAlert.addEventListener("click", hideAlertBox);
 
-// Add book form show control
-function showAddBookForm() {
-  addBookForm.style.left = "0";
-}
-function hideAddBookForm() {
-  addBookForm.style.left = "-100%";
-}
-addBookBtn.addEventListener("click", () => showAddBookForm());
-closeFormBtn.addEventListener("click", () => hideAddBookForm());
-
-// Search Bar
-function handleSearchBar() {
-  const searchTerm = searchBar.value.toLowerCase();
-  const filteredData = allBookData.filter((book) => {
-    const result = book.title.toLowerCase().includes(searchTerm);
+const searchBook = document.getElementById("searchBook");
+function handleSearchBook() {
+  const inputValue = searchBook.value.toLowerCase().trim();
+  const filterBook = bookStorage.filter((book) => {
+    const result = book.title.toLowerCase().trim().includes(inputValue);
     if (result) {
-      console.log("isi");
       return result;
-    } else {
-      console.log("Kosong");
     }
   });
-
-  listRoot.innerHTML = "";
-  completedRoot.innerHTML = "";
-
-  filteredData.forEach((book) => {
-    createElement(book);
+  hideAllRootChild();
+  filterBook.forEach((book) => {
+    createCardElement(
+      book.id,
+      book.title,
+      book.image,
+      book.author,
+      book.year,
+      book.isBookmark
+    );
   });
 }
-searchBar.addEventListener("input", handleSearchBar);
 
-// Add data to local storage
-function addLocalStorage(data) {
-  allBookData.push(data);
-  localStorage.setItem("book-list", JSON.stringify(allBookData));
-}
+searchBook.addEventListener("input", handleSearchBook);
 
-//Create Card Element
-function createElement(bookData) {
-  const div = document.createElement("div");
-  const heading1 = document.createElement("h1");
-  const heading4 = document.createElement("h4");
-  const paragraph = document.createElement("p");
-  const buttonSection = document.createElement("section");
-  const bookDataSection = document.createElement("section");
-  const button = document.createElement("button");
-  const handleCompleteButton = document.createElement("button");
-
-  heading1.innerText = `Title : ${bookData.title}`;
-  heading4.innerText = `Author : ${bookData.author}`;
-  paragraph.innerText = `Year : ${bookData.year}`;
-  button.innerText = "Remove";
-
-  div.classList.add("card-container");
-  bookDataSection.classList.add("book-data-section");
-  buttonSection.classList.add("button-section");
-  button.classList.add("remove-card-button");
-  handleCompleteButton.classList.add("handle-complete-button");
-
-  div.setAttribute("card-id", bookData.id);
-
-  if (!bookData.isComplete) {
-    handleCompleteButton.innerText = "Mark as Completed";
-  } else {
-    handleCompleteButton.innerText = "Uncompleted";
-  }
-
-  bookDataSection.append(heading1);
-  bookDataSection.append(heading4);
-  bookDataSection.append(paragraph);
-  buttonSection.append(button);
-  buttonSection.append(handleCompleteButton);
-
-  div.append(bookDataSection);
-  div.append(buttonSection);
-
-  if (!bookData.isComplete) {
-    listRoot.appendChild(div);
-  } else {
-    completedRoot.appendChild(div);
-  }
-}
-
-// Remove card button
-function removeCard(id) {
-  let index = allBookData.findIndex((e) => e.id == id);
-  allBookData.splice(index, 1);
-  localStorage.setItem("book-list", JSON.stringify(allBookData));
-  setAlert("Removed Book");
-}
-document.body.addEventListener("click", (e) => {
-  if (e.target.classList.contains("remove-card-button")) {
-    const divElement = e.target.closest("div");
-    const id = divElement.getAttribute("card-id");
-    divElement.remove();
-    removeCard(id);
-  }
-});
-
-// Toggle isCompleted book data
-function isCompletedToggle(id) {
-  const index = allBookData.findIndex((e) => e.id == id);
-  const divElement = document.querySelector(`div[card-id="${id}"]`);
-
-  if (allBookData[index].isComplete) {
-    completedRoot.removeChild(divElement);
-  } else {
-    listRoot.removeChild(divElement);
-  }
-
-  const updatedData = {
-    ...allBookData[index],
-    isComplete: !allBookData[index].isComplete,
-  };
-  allBookData.splice(index, 1, updatedData);
-  localStorage.setItem("book-list", JSON.stringify(allBookData));
-
-  if (!updatedData.isComplete) {
-    createElement(allBookData[index]);
-    setAlert("Moved to Book List!");
-  } else {
-    createElement(allBookData[index]);
-    setAlert("Moved to Completed List!");
-  }
-}
-document.body.addEventListener("click", (e) => {
-  if (e.target.classList.contains("handle-complete-button")) {
-    const divElement = e.target.closest("div");
-    const id = divElement.getAttribute("card-id");
-    isCompletedToggle(id);
-  }
-});
-
-// Reset form input
-function resetFormInput() {
-  titleInput.value = "";
-  authorInput.value = "";
-  yearInput.value = "";
-  completedInput.checked = false;
-}
-
-// Add new book form
-function handleSubmit(e) {
-  e.preventDefault();
-  if (
-    titleInput.value === "" ||
-    authorInput.value === "" ||
-    yearInput.value === ""
-  ) {
-    setAlert("Input Cannot be Empty!");
-    return;
-  }
-  const bookData = {
-    id: Date.now(),
-    title: titleInput.value,
-    author: authorInput.value,
-    year: Number(yearInput.value),
-    isComplete: completedInput.checked,
-  };
-  createElement(bookData);
-  addLocalStorage(bookData);
-  resetFormInput();
-  setAlert("Book Added!");
-}
-formSubmitButton.addEventListener("click", (e) => handleSubmit(e));
-
-// Display Data
-function displayData() {
-  allBookData.forEach((book) => {
-    createElement(book);
-  });
-}
-window.addEventListener("DOMContentLoaded", displayData);
+window.addEventListener("DOMContentLoaded", loadBookData);
